@@ -1,0 +1,25 @@
+package daily.leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArrayTo2DArray {
+
+    // A way to store frequency is to use array when nums[i] <= nums.length
+    public static List<List<Integer>> findMatrix(int[] nums) {
+        int[] freq = new int[nums.length + 1];
+        ArrayList<List<Integer>> ans = new ArrayList<>();
+
+        for (int c : nums) {
+            if (freq[c] >= ans.size()) ans.add(new ArrayList<>());
+
+            ans.get(freq[c]).add(c);
+            freq[c]++;
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+
+    }
+}
