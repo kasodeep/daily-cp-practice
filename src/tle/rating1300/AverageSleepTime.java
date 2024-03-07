@@ -1,18 +1,35 @@
+package tle.rating1300;
+
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class AverageSleepTime {
+
     public static void main(String[] args) {
         try {
-            FastReader in = new FastReader(new BufferedReader(new FileReader("input.txt")));
-            FastWriter out = new FastWriter(new BufferedWriter(new FileWriter("output.txt")));
+            // FastReader in = new FastReader(new BufferedReader(new FileReader("input.txt")));
+            // FastWriter out = new FastWriter(new BufferedWriter(new FileWriter("output.txt")));
 
-            // FastReader in = new FastReader();
-            // FastWriter out = new FastWriter();
-            int t = in.nextInt();
-            while (t-- > 0) {
-                // Nothing Code.
+            FastReader in = new FastReader();
+            FastWriter out = new FastWriter();
+
+            // int t = in.nextInt();
+            // while(t-- > 0){
+            int n = in.nextInt();
+            int k = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+
+            double sum = 0;
+            int i;
+            for (i = 0; i < k; i++) sum += arr[i];
+            double ans = sum;
+            while (i < n) {
+                sum = sum + arr[i] - arr[i - k];
+                ans += sum;
+                i++;
             }
+            out.printDouble((ans / (n - k + 1)), 6);
+            // }
             out.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -109,6 +126,11 @@ public class Main {
             bw.append("\n");
         }
 
+        public void printDouble(double num, int precision) throws IOException {
+            String formatted = String.format(new StringBuilder().append("%.").append(precision).append("f").toString(), num);
+            bw.append(formatted);
+        }
+
         public void close() throws IOException {
             bw.close();
         }
@@ -142,3 +164,4 @@ public class Main {
         }
     }
 }
+

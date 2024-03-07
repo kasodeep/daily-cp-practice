@@ -1,18 +1,35 @@
-import java.io.*;
-import java.util.*;
+package tle.rating1300;
 
-public class Main {
+import java.util.*;
+import java.io.*;
+
+/**
+ * Greedy Approach works when working with adjacent letters.
+ */
+public class SimpleStrings {
+
     public static void main(String[] args) {
         try {
-            FastReader in = new FastReader(new BufferedReader(new FileReader("input.txt")));
-            FastWriter out = new FastWriter(new BufferedWriter(new FileWriter("output.txt")));
+            FastReader in = new FastReader();
+            FastWriter out = new FastWriter();
 
-            // FastReader in = new FastReader();
-            // FastWriter out = new FastWriter();
-            int t = in.nextInt();
-            while (t-- > 0) {
-                // Nothing Code.
+            String S = in.next();
+            int n = S.length();
+            char[] s = S.toCharArray();
+
+            for (int i = 0, j = 0; i < n; i = j) {
+                while (j < n && s[j] == s[i]) j++;
+                char c = 'a';
+
+                // Finding the Character to add.
+                while (c == s[i] || (i > 0 && c == s[i - 1]) || (j < n && c == s[j])) c++;
+
+                for (int k = i; k < j; k++)
+                    if ((i + k) % 2 == 1) s[k] = c;
             }
+
+            out.printCharArray(s);
+
             out.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
