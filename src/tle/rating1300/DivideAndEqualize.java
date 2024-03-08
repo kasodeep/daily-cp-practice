@@ -1,24 +1,64 @@
+package tle.rating1300;
+
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class DivideAndEqualize {
+
     public static void main(String[] args) {
         try {
-            FastReader in = new FastReader(new BufferedReader(new FileReader("input.txt")));
-            FastWriter out = new FastWriter(new BufferedWriter(new FileWriter("output.txt")));
-
-            // FastReader in = new FastReader();
-            // FastWriter out = new FastWriter();
+            FastReader in = new FastReader();
+            FastWriter out = new FastWriter();
 
             int t = in.nextInt();
-            while(t-- > 0){
+            while (t-- > 0) {
                 int n = in.nextInt();
                 int[] arr = in.nextIntArray(n);
+
+                HashMap<Integer, Integer> map = new HashMap<>();
+                for (int num : arr) {
+                    if (num == 1) continue;
+                    HashMap<Integer, Integer> temp = primeFactorsWithCount(num);
+
+                    for (Map.Entry<Integer, Integer> entry : temp.entrySet()) {
+                        map.put(entry.getKey(), map.getOrDefault(entry.getKey(), 0) + temp.get(entry.getKey()));
+                    }
+                }
+
+                boolean flag = false;
+                for (int value : map.values()) {
+                    if (value % n != 0) {
+                        flag = true;
+                        break;
+                    }
+                }
+
+                if (!flag) out.println("Yes");
+                else out.println("No");
             }
             out.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static HashMap<Integer, Integer> primeFactorsWithCount(int n) {
+        HashMap<Integer, Integer> factorsWithCount = new HashMap<>();
+
+        while (n % 2 == 0) {
+            factorsWithCount.put(2, factorsWithCount.getOrDefault(2, 0) + 1);
+            n /= 2;
+        }
+
+        for (int i = 3; i <= Math.sqrt(n); i += 2) {
+            while (n % i == 0) {
+                factorsWithCount.put(i, factorsWithCount.getOrDefault(i, 0) + 1);
+                n /= i;
+            }
+        }
+
+        if (n > 2) factorsWithCount.put(n, factorsWithCount.getOrDefault(n, 0) + 1);
+        return factorsWithCount;
     }
 
     static class FastReader {
@@ -170,24 +210,5 @@ public class Main {
         public int hashCode() {
             return Objects.hash(x, y);
         }
-    }
-
-    public static HashMap<Integer, Integer> primeFactorsWithCount(int n) {
-        HashMap<Integer, Integer> factorsWithCount = new HashMap<>();
-
-        while (n % 2 == 0) {
-            factorsWithCount.put(2, factorsWithCount.getOrDefault(2, 0) + 1);
-            n /= 2;
-        }
-
-        for (int i = 3; i <= Math.sqrt(n); i += 2) {
-            while (n % i == 0) {
-                factorsWithCount.put(i, factorsWithCount.getOrDefault(i, 0) + 1);
-                n /= i;
-            }
-        }
-
-        if (n > 2) factorsWithCount.put(n, factorsWithCount.getOrDefault(n, 0) + 1);
-        return factorsWithCount;
     }
 }
