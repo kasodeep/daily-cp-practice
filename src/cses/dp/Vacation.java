@@ -1,10 +1,11 @@
-package cses;
+package cses.dp;
 
 import java.io.*;
 import java.util.*;
 
-public class DiceCombinations {
+public class Vacation {
     final static int mod = 1000000007;
+    static int[][][][] memo;
 
     public static void main(String[] args) {
         try {
@@ -12,21 +13,41 @@ public class DiceCombinations {
             FastWriter out = new FastWriter();
 
             int n = in.nextInt();
-            int[] dp = new int[n + 1];
-            dp[0] = 1;
-
-            for (int i = 1; i <= n; i++) {
-                for (int j = 1; j <= 6; j++) {
-                    if (i >= j) {
-                        dp[i] = (dp[i] + dp[i - j]) % mod;
-                    }
-                }
+            memo = new int[n + 1][2][2][2];
+            for (int[][][] temp : memo) {
+                for (int[][] outer : temp)
+                    for (int[] inner : outer) Arrays.fill(inner, -1);
             }
-            out.println(dp[n] % mod);
+
+            int[] a = new int[n];
+            int[] b = new int[n];
+            int[] c = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                a[i] = in.nextInt();
+                b[i] = in.nextInt();
+                c[i] = in.nextInt();
+            }
+
+            int ans = solve(a, b, c, 0, n, 0, 0, 0);
+            out.println(ans);
+
             out.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    static int solve(int[] a, int[] b, int[] c, int i, int n, int swim, int bug, int home) {
+        if (i >= n) return 0;
+        if (memo[i][swim][bug][home] != -1) return memo[i][swim][bug][home];
+
+        int ans = 0;
+        if (swim != 1) ans = Math.max(ans, a[i] + solve(a, b, c, i + 1, n, 1, 0, 0));
+        if (bug != 1) ans = Math.max(ans, b[i] + solve(a, b, c, i + 1, n, 0, 1, 0));
+        if (home != 1) ans = Math.max(ans, c[i] + solve(a, b, c, i + 1, n, 0, 0, 1));
+
+        return memo[i][swim][bug][home] = ans;
     }
 
     static class FastReader {

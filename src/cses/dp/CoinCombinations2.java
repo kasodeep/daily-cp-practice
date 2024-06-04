@@ -1,10 +1,11 @@
-package cses;
+package cses.dp;
 
 import java.io.*;
 import java.util.*;
 
-public class MinimizingCoins {
-    final static long mod = 1000000007;
+public class CoinCombinations2 {
+
+    final static int mod = 1000000007;
 
     public static void main(String[] args) {
         try {
@@ -13,21 +14,17 @@ public class MinimizingCoins {
 
             int n = in.nextInt();
             int x = in.nextInt();
-
             int[] coins = in.nextIntArray(n);
-            long[] dp = new long[x + 1];
 
-            Arrays.fill(dp, Integer.MAX_VALUE);
-            dp[0] = 0;
+            int[] dp = new int[x + 1];
+            dp[0] = 1;
 
-            for (int j = 1; j <= x; j++) {
-                for (int i = 0; i < n; i++) {
-                    if (coins[i] <= j) {
-                        dp[j] = Math.min(dp[j], dp[j - coins[i]] + 1);
-                    }
+            for (int i = 0; i < n; i++) {
+                for (int j = coins[i]; j <= x; j++) {
+                    dp[j] = (dp[j] + dp[j - coins[i]]) % mod;
                 }
             }
-            out.println(dp[x] >= Integer.MAX_VALUE ? -1 : dp[x]);
+            out.println(dp[x] % mod);
             out.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -172,3 +169,4 @@ public class MinimizingCoins {
         }
     }
 }
+
